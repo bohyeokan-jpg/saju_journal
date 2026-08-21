@@ -81,6 +81,16 @@ class SajuProfileScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  '십성(十星)은 일간(나)과 사주의 다른 글자들이 어떤 관계를 맺는지를 '
+                  '나타내는 10가지 유형이에요. 아래는 이번 사주에 나타난 관계들이 '
+                  '어떤 결을 가지는지에 대한 짧은 풀이예요.',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                ),
+                const SizedBox(height: 12),
                 Text(sipsinContent[profile.yearSipSin]!,
                     style: Theme.of(context).textTheme.bodyMedium),
                 const SizedBox(height: 10),
