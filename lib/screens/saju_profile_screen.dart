@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../content/sipsin_content.dart';
 import '../content/wuxing_content.dart';
 import '../models/profile_state.dart';
 import '../models/saju_profile.dart';
@@ -10,7 +9,10 @@ import '../utils/date_key.dart';
 import '../widgets/manse_table.dart';
 import '../widgets/wuxing_distribution_chart.dart';
 
-/// 사주 프로필 결과 화면 — 만세력 표 + 오행 분포 + 십성 요약.
+/// 사주 프로필 결과 화면 — 만세력 표 + 오행 분포.
+/// 십성 요약은 사용자 피드백으로 제거함(이해하기 어렵다는 의견) — 십성
+/// 계산·콘텐츠(`sip_sin.dart`/`sipsin_content.dart`)는 그대로 남겨뒀으니
+/// 나중에 다른 형태로 다시 노출할 수 있음.
 class SajuProfileScreen extends StatelessWidget {
   const SajuProfileScreen({super.key});
 
@@ -72,35 +74,6 @@ class SajuProfileScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          _SectionCard(
-            title: '십성 요약',
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '십성(十星)은 일간(나)과 사주의 다른 글자들이 어떤 관계를 맺는지를 '
-                  '나타내는 10가지 유형이에요. 아래는 이번 사주에 나타난 관계들이 '
-                  '어떤 결을 가지는지에 대한 짧은 풀이예요.',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
-                ),
-                const SizedBox(height: 12),
-                Text(sipsinContent[profile.yearSipSin]!,
-                    style: Theme.of(context).textTheme.bodyMedium),
-                const SizedBox(height: 10),
-                Text(sipsinContent[profile.monthSipSin]!,
-                    style: Theme.of(context).textTheme.bodyMedium),
-                if (profile.timeSipSin != null) ...[
-                  const SizedBox(height: 10),
-                  Text(sipsinContent[profile.timeSipSin]!,
-                      style: Theme.of(context).textTheme.bodyMedium),
-                ],
               ],
             ),
           ),
