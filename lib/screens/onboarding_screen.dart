@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../content/birth_cities.dart';
 import '../models/profile_state.dart';
+import '../models/wu_xing.dart';
 
 /// 생년월일시 입력 화면. 양력/음력 선택, "시간 모름" 옵션, 출생 도시(경도
 /// 매핑용) 선택을 받아 [ProfileState.calculateAndSave]를 호출한다.
@@ -107,10 +108,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          Text(
-            '태어난 시각을 입력하면 사주 네 기둥을 계산해요.\n예측이 아니라 나를 이해하는 도구로 씁니다.',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+          _OnboardingHeader(brightness: Theme.of(context).brightness),
           const SizedBox(height: 24),
           SegmentedButton<bool>(
             segments: const [
@@ -220,6 +218,51 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ? const SizedBox(
                     width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
                 : const Text('사주 계산하기'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 온보딩 첫 화면 상단 헤더. 드롭다운/체크박스만 나열되는 화면이 삭막해
+/// 보이지 않게, 오행 다섯 색의 작은 점(아주 단순한 기하학적 장식)과 함께
+/// 앱 취지를 한 줄로 설명한다. 화려한 일러스트 대신 앱 전체의 절제된
+/// 톤을 그대로 유지한다.
+class _OnboardingHeader extends StatelessWidget {
+  final Brightness brightness;
+  const _OnboardingHeader({required this.brightness});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              for (final w in WuXing.values) ...[
+                Container(
+                  width: 9,
+                  height: 9,
+                  decoration: BoxDecoration(
+                    color: w.colorFor(brightness),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 7),
+              ],
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '태어난 시각을 입력하면 사주 네 기둥을 계산해요.\n예측이 아니라 나를 이해하는 도구로 씁니다.',
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
       ),

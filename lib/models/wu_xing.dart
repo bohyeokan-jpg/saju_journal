@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// 오행(五行) — 이 앱 전체에서 십성/한자 표기 대신 이 enum과 한글 라벨만 다룬다.
 /// `lunar` 패키지는 한자(木火土金水)로 결과를 주므로, 계산기 경계에서 바로
 /// 이 enum으로 변환해 그 이후 레이어(모델/화면/콘텐츠)는 한자를 몰라도 되게 한다.
@@ -21,6 +23,34 @@ extension WuXingLabel on WuXing {
         WuXing.geum => '결단과 정리',
         WuXing.su => '지혜와 저장',
       };
+}
+
+/// 오행별 포인트 색 — 만세력 표·오행 분포 차트·온보딩 장식에서 공유해서 쓴다.
+/// 앱 팔레트(오프화이트/차콜 배경 + 인디고 포인트, `app_theme.dart`)의 절제된
+/// 톤에서 벗어나지 않도록 채도를 낮춰 골랐다. 수(水)는 이미 앱 포인트색이
+/// 인디고 계열이라 헷갈리지 않게 더 짙고 남색에 가깝게 구분했다.
+extension WuXingColor on WuXing {
+  /// 라이트 모드(오프화이트/흰 배경)에서 쓰는 색.
+  Color get lightColor => switch (this) {
+        WuXing.mok => const Color(0xFF5F7A5A), // 세이지그린
+        WuXing.hwa => const Color(0xFFB2604A), // 테라코타
+        WuXing.to => const Color(0xFFAD8944), // 머스타드/오커
+        WuXing.geum => const Color(0xFF6B6B62), // 웜그레이
+        WuXing.su => const Color(0xFF33406B), // 짙은 인디고/네이비
+      };
+
+  /// 다크 모드(차콜 배경)에서 쓰는 색 — 어두운 배경에서도 구분되게 밝혔다.
+  Color get darkColor => switch (this) {
+        WuXing.mok => const Color(0xFF8FAF89), // 세이지그린
+        WuXing.hwa => const Color(0xFFD98A72), // 테라코타
+        WuXing.to => const Color(0xFFD4B06B), // 머스타드/오커
+        WuXing.geum => const Color(0xFFBDBDB2), // 웜그레이
+        WuXing.su => const Color(0xFF7683B8), // 인디고/네이비
+      };
+
+  /// [brightness]에 맞는 색을 돌려준다.
+  Color colorFor(Brightness brightness) =>
+      brightness == Brightness.light ? lightColor : darkColor;
 }
 
 /// `lunar` 패키지가 돌려주는 오행 한자 한 글자를 [WuXing]으로 변환.

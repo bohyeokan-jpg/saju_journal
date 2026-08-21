@@ -8,18 +8,11 @@ class WuxingDistributionChart extends StatelessWidget {
   final Map<WuXing, int> counts;
   const WuxingDistributionChart({super.key, required this.counts});
 
-  static const _colors = {
-    WuXing.mok: Color(0xFF4C8C5B),
-    WuXing.hwa: Color(0xFFC1503F),
-    WuXing.to: Color(0xFFB8924A),
-    WuXing.geum: Color(0xFF8A8A82),
-    WuXing.su: Color(0xFF3A4C9C),
-  };
-
   @override
   Widget build(BuildContext context) {
     final total = counts.values.fold(0, (a, b) => a + b);
     final scheme = Theme.of(context).colorScheme;
+    final brightness = Theme.of(context).brightness;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -30,7 +23,13 @@ class WuxingDistributionChart extends StatelessWidget {
               children: [
                 SizedBox(
                   width: 28,
-                  child: Text(element.label, style: Theme.of(context).textTheme.titleSmall),
+                  child: Text(
+                    element.label,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(color: element.colorFor(brightness)),
+                  ),
                 ),
                 Expanded(
                   child: ClipRRect(
@@ -39,7 +38,7 @@ class WuxingDistributionChart extends StatelessWidget {
                       value: total == 0 ? 0 : (counts[element] ?? 0) / total,
                       minHeight: 14,
                       backgroundColor: scheme.surfaceContainerHighest.withValues(alpha: 0.4),
-                      color: _colors[element],
+                      color: element.colorFor(brightness),
                     ),
                   ),
                 ),
