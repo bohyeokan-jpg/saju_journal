@@ -4,12 +4,15 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:saju_journal/main.dart';
+import 'package:saju_journal/models/app_navigation_state.dart';
 import 'package:saju_journal/models/app_theme_state.dart';
 import 'package:saju_journal/models/journal_state.dart';
+import 'package:saju_journal/models/notification_settings_state.dart';
 import 'package:saju_journal/models/profile_state.dart';
 import 'package:saju_journal/screens/home_shell.dart';
 import 'package:saju_journal/screens/settings_screen.dart';
 import 'package:saju_journal/services/journal_store.dart';
+import 'package:saju_journal/services/notification_settings_store.dart';
 import 'package:saju_journal/services/profile_store.dart';
 import 'package:saju_journal/services/theme_mode_store.dart';
 
@@ -33,6 +36,9 @@ void main() {
     await journalState.load();
     final themeState = AppThemeState(ThemeModeStore());
     await themeState.load();
+    final notifState = NotificationSettingsState(NotificationSettingsStore());
+    await notifState.load();
+    final navigationState = AppNavigationState();
 
     await tester.pumpWidget(
       MultiProvider(
@@ -40,6 +46,8 @@ void main() {
           ChangeNotifierProvider.value(value: profileState),
           ChangeNotifierProvider.value(value: journalState),
           ChangeNotifierProvider.value(value: themeState),
+          ChangeNotifierProvider.value(value: notifState),
+          ChangeNotifierProvider.value(value: navigationState),
         ],
         child: const SajuJournalApp(),
       ),
@@ -119,6 +127,9 @@ void main() {
     await journalState.load();
     final themeState = AppThemeState(ThemeModeStore());
     await themeState.load();
+    final notifState = NotificationSettingsState(NotificationSettingsStore());
+    await notifState.load();
+    final navigationState = AppNavigationState();
 
     await tester.pumpWidget(
       MultiProvider(
@@ -126,6 +137,8 @@ void main() {
           ChangeNotifierProvider.value(value: profileState),
           ChangeNotifierProvider.value(value: journalState),
           ChangeNotifierProvider.value(value: themeState),
+          ChangeNotifierProvider.value(value: notifState),
+          ChangeNotifierProvider.value(value: navigationState),
         ],
         child: const MaterialApp(home: SettingsScreen()),
       ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../models/app_navigation_state.dart';
 import 'journal_history_screen.dart';
 import 'saju_profile_screen.dart';
 import 'settings_screen.dart';
@@ -15,6 +17,7 @@ class HomeShell extends StatefulWidget {
 
 class _HomeShellState extends State<HomeShell> {
   int _index = 0;
+  int? _lastTabRequest;
 
   static const _screens = [
     TodayScreen(),
@@ -25,6 +28,18 @@ class _HomeShellState extends State<HomeShell> {
 
   @override
   Widget build(BuildContext context) {
+    // 알림 클릭 등으로 "오늘" 탭 이동이 요청되면(tabRequest 값이 바뀌면)
+    // 탭 인덱스를 0으로 되돌린다.
+    final tabRequest = context.watch<AppNavigationState>().tabRequest;
+    if (_lastTabRequest != tabRequest) {
+      _lastTabRequest = tabRequest;
+      if (_index != 0) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) setState(() => _index = 0);
+        });
+      }
+    }
+
     return Scaffold(
       body: IndexedStack(index: _index, children: _screens),
       bottomNavigationBar: NavigationBar(
