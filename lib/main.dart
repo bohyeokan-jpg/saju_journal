@@ -28,11 +28,12 @@ Future<void> main() async {
   final themeState = AppThemeState(ThemeModeStore());
   await themeState.load();
 
-  final notifSettings = NotificationSettingsState(NotificationSettingsStore());
+  final notifSettingsStore = NotificationSettingsStore();
+  final notifSettings = NotificationSettingsState(notifSettingsStore);
   await notifSettings.load();
 
   final navigationState = AppNavigationState();
-  DailyNotificationScheduler(notifSettings, BrowserNotifier(), navigationState).start();
+  DailyNotificationScheduler(notifSettings, BrowserNotifier(), navigationState, notifSettingsStore).start();
 
   runApp(
     MultiProvider(

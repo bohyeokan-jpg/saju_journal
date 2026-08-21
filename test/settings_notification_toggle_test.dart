@@ -89,4 +89,15 @@ void main() {
     final prefs = await SharedPreferences.getInstance();
     expect(prefs.getBool('notif_enabled'), isNot(true));
   });
+
+  testWidgets('웹이 아닌 빌드(isSupported == false)에서는 안내 문구만 뜨고 스위치는 없다', (tester) async {
+    // notifier를 주입하지 않으면 SettingsScreen이 실제 BrowserNotifier()를
+    // 쓴다 — flutter test 환경(비웹)에서는 항상 isSupported == false인
+    // no-op 구현(browser_notifier_stub.dart)으로 해석된다.
+    await pumpSettings(tester, notifier: BrowserNotifier());
+
+    expect(find.text('이 기능은 웹 버전에서만 사용할 수 있어요'), findsOneWidget);
+    expect(find.text('오늘의 운세 알림'), findsNothing);
+    expect(find.byType(Switch), findsNothing);
+  });
 }
